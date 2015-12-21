@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<title>Parse - Todo</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<!-- jQueryJS lib -->
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<!-- Underscore -->
+<script src="lib/underscore.js"></script>
+
+<!-- Parse -->
+<script src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
+
+<!-- AngularJS app -->
+<script src="lib/app.js"></script>
+
+<script src="lib/classie.js"></script>
+<script src="lib/selectFx.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-responsive.css">
+
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,200,600' rel='stylesheet' type='text/css'>
+
+<!-- personal CSS -->
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<div>
+
+	<nav class="navbar navbar-fixed-top header">
+	 	<div class="col-md-12">
+	        <div class="navbar-header">
+	          
+	          <a class="navbar-brand navbar-brand-beetles" href="../">Webinar - Node.js and BaaS</a>
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
+	          </button>
+	      
+	        </div>
+	        <div class="collapse navbar-collapse" id="navbar-collapse1">
+				<ul class="nav navbar-nav navbar-left">
+					<li><a href="../firebase/" class="btn btn-default">Firebase</a></li>
+					<li><a href="../rethinkdb/" class="btn btn-default">RethinkDB</a></li>
+					<li><a href="../parse/" class="btn btn-default">Parse</a></li>
+					<li><a href="../userapp/" class="btn btn-default">UserApp</a></li>
+					<li><a href="../node/" class="btn btn-default">Node</a></li>
+					<li><a href="../mongodb/" class="btn btn-default">MongoDB</a></li>
+					<li><a href="../express/" class="btn btn-default">Express</a></li>
+					<li><a href="../swagger/" class="btn btn-default">Swagger</a></li>
+					<li><a href="../apiblueprint/" class="btn btn-default">APIary (APIBlueprint)</a></li>
+					<li><a href="../loopback/" class="btn btn-default">Loopback</a></li>					
+	           </ul>			   
+	        </div>	
+	     </div>
+	</nav>
+  
+	<div class="container" id="main">
+	  
+	  <!-- Todo App Interface -->
+
+	<div class="row">
+		<div class="col-md-12">
+			<div id="todoapp">
+			  <div class="title">
+				<h1>Parse Todos</h1>
+			  </div>
+
+			  <div class="content">
+			  </div>
+			</div>
+		</div>
+	</div>
+
+    <!-- Templates -->
+
+    <script type="text/template" id="login-template">
+      <header id="header"></header>
+      <div class="login">
+        <form class="login-form">
+          <h2>Log In</h2>
+          <div class="error" style="display:none"></div>
+          <input type="text" id="login-username" placeholder="Username" />
+          <input type="password" id="login-password" placeholder="Password" />
+          <button>Log In</button>
+        </form>
+
+        <form class="signup-form">
+          <h2>Sign Up</h2>
+          <div class="error" style="display:none"></div>
+          <input type="text" id="signup-username" placeholder="Username" />
+          <input type="password" id="signup-password" placeholder="Create a Password" />
+          <button>Sign Up</button>
+        </form>
+		
+		<form class="facebookauth-form">
+          <h2>Facebook</h2>
+          <div class="error" style="display:none"></div>          
+          <button>Sign In Using Facebook</button>
+        </form>
+      </div>
+    </script>
+
+    <script type="text/template" id="manage-todos-template">
+      <div id="user-info">
+        Signed in as <%= Parse.User.current().escape("username") %> (<a href="#" class="log-out">Log out</a>)
+      </div>
+
+      <div class="section">
+
+        <header id="header">
+          <input id="new-todo" placeholder="What needs to be done?" type="text" />
+        </header>
+
+        <div id="main">
+          <input id="toggle-all" type="checkbox">
+          <label for="toggle-all">Mark all as complete</label>
+          
+          <ul id="todo-list">
+            <img src='img/spinner.gif' class='spinner' />
+          </ul>
+        </div>
+
+        <div id="todo-stats"></div>
+      </div>
+    </script>
+
+    <script type="text/template" id="item-template">
+      <li class="<%= done ? 'completed' : '' %>">
+		<div class="view">
+		  <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %>>
+		  <label class="todo-content"><%= _.escape(content) %></label>
+		  <button class="todo-destroy"></button>
+		</div>
+		<input class="edit" value="<%= _.escape(content) %>">
+      </li>
+    </script>
+
+    <script type="text/template" id="stats-template">
+      <footer id="footer">
+	<span id="todo-count"><strong><%= remaining %></strong> <%= remaining == 1 ? 'item' : 'items' %> left</span>
+	<ul id="filters">
+	  <li>
+	    <a href="javascript:void(0)" id="all" class="selected">All</a>
+	  </li>
+	  <li>
+	    <a href="javascript:void(0)" id="active">Active</a>
+	  </li>
+	  <li>
+	    <a href="javascript:void(0)" id="completed">Completed</a>
+	  </li>
+	</ul>
+	<button id="clear-completed">Clear completed (<%= done %>)</button>
+      </footer>
+    </script>
+	   
+	</div>
+</div>
+
+<!-- Personal script for design -->
+<script src="lib/scripts.js"></script>
+
+
+
+</body>
+</html>

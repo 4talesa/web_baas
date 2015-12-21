@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<title>Firebase - Todo</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<!-- jQueryJS lib -->
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<!-- AngularJS -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+
+<!-- Firebase -->
+<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+
+<!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+
+<!-- AngularJS app -->
+<script src="lib/app.js"></script>
+
+<script src="lib/classie.js"></script>
+<script src="lib/selectFx.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-responsive.css">
+
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,200,600' rel='stylesheet' type='text/css'>
+
+<!-- personal CSS -->
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<div ng-app="TodoApp" ng-controller="mainController">
+
+	<nav class="navbar navbar-fixed-top header">
+	 	<div class="col-md-12">
+	        <div class="navbar-header">
+	          
+	          <a class="navbar-brand navbar-brand-beetles" href="../">Webinar - Node.js and BaaS</a>
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
+	          </button>
+	      
+	        </div>
+	        <div class="collapse navbar-collapse" id="navbar-collapse1">
+				<ul class="nav navbar-nav navbar-left">
+					<li><a href="../firebase/"" class="btn btn-default">Firebase</a></li>
+					<li><a href="../rethinkdb/"" class="btn btn-default">RethinkDB</a></li>
+					<li><a href="../parse/"" class="btn btn-default">Parse</a></li>
+					<li><a href="../userapp/"" class="btn btn-default">UserApp</a></li>
+					<li><a href="../node/"" class="btn btn-default">Node</a></li>
+					<li><a href="../mongodb/" class="btn btn-default">MongoDB</a></li>
+					<li><a href="../express/"" class="btn btn-default">Express</a></li>
+					<li><a href="../swagger/"" class="btn btn-default">Swagger</a></li>
+					<li><a href="../apiblueprint/"" class="btn btn-default">APIary (APIBlueprint)</a></li>
+					<li><a href="../loopback/"" class="btn btn-default">Loopback</a></li>					
+	           </ul>
+	        </div>	
+	     </div>
+	</nav>
+  
+	<div class="container" id="main">
+	
+	  <div class="row">
+		  <div class="col-md-12">
+			  <h1>Firebase - Todos</h1>
+		  </div>
+	  </div>
+
+	  <div class="row">
+		  <div class="col-md-4 col-sm-6">
+			  <div class="panel panel-default">
+				  <div class="panel-body">
+					  <div class="row">
+					  <form novalidate class="simple-form">
+						  <div class="col-md-12">
+							<div class="header flex">
+							   <span>Description</span>
+							   <input class="description" name="description" type="text" ng-model="item.description">
+							   <div class="pull-right">
+								   <span>Status</span>
+									<select name="singleSelect" ng-model="item.status">
+										<option value='todo'>To do</option>
+										<option value='doing'>Doing</option>
+										<option value='done'>Done</option>			      					     					
+									</select>		
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							</div>
+							<div class="col-md-12">	
+								<span>Responsible</span>
+								<input class="responsible" name="responsible" type="text" ng-model="item.responsible">
+							</div>
+							<div class="col-md-12">									
+								<span>Obs</span>
+								<input class="obs" name="obs" type="text" ng-model="item.obs">
+							</div>								
+							<div class="col-md-6">
+							  <a href="#" class="btn btn-warning" ng-click="actAdd( $event, item )">Add</a>
+							</div>
+						  </div>
+					  </form>
+					  </div>
+				   </div>	 	    		      
+			   </div>
+
+	    
+	    <div class="col-md-4 col-sm-6" ng-repeat="(id, item) in task">
+	      
+		      <div class="panel panel-default">
+			     
+				  <div class="panel-body">			  	  
+					    
+				      <div class="row">
+					      <div class="col-md-12">
+					      	<div class="header flex">
+							   <span>Description</span>							
+							   <input class="description" name="description" type="text" ng-model="item.description" ng-change="item.$save()">
+							   <div class="pull-right">
+									<span>Status</span>
+									<select class="pull-right" name="singleSelect" ng-model="item.status">
+										<option value='todo'>To do</option>
+										<option value='doing'>Doing</option>
+										<option value='done'>Done</option>			      					     					
+									</select>						      		
+								</div>
+					      	</div>							  
+			      				<div class="clearfix"></div>
+							</div>
+							<div class="col-md-12">
+							    <span>Responsible</span>
+								<input class="responsible" name="responsible" type="text" ng-model="item.responsible" ng-change="item.$save()">
+						     </div>
+							<div class="col-md-12">
+							    <span>Obs</span>
+			      				<input class="obs" name="obs" type="text" ng-model="item.obs" ng-change="item.$save()">
+							</div>								
+						  <div class="col-md-6">
+					      	  <a href="#" class="btn btn-warning" ng-click="actDelete( $event, id )">Delete</a>
+						  </div>						  
+					  </div>
+				   </div>	 	    		      
+		      </div>
+	      
+	    </div>       
+	      
+	  </div>
+	   
+	</div>
+</div>
+
+<!-- Personal script for design -->
+<script src="lib/scripts.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Angular UserApp Demo</title>
+
+  <% include ../partials/header.ejs %>
+
+  <!-- Font Awesome -->
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="../pages/userapp/css/app.css"/>
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+
+  <% include ../partials/menu.ejs %>
+  
+  
+  <div class="container" id="main">
+	
+	  <div class="row">
+		  <div class="col-md-12">
+			  <h1>Firebase - Todos</h1>
+		  </div>
+	  </div>
+
+	  <div class="row">
+		  <div class="col-md-2 col-sm-6">
+			  <div class="panel panel-default">
+				  <div class="panel-body">
+					  <div class="row navbar">
+						  <ul class="nav navbar">
+							<li ng-show="user.authenticated"><a href="#/articles" menu-item class="btn btn-success">Articles</a></li>
+							<li ng-show="!user.authenticated"><a href="#/login" menu-item class="btn btn-success">Log In</a></li>
+							<li ng-show="!user.authenticated"><a href="#/signup" menu-item class="btn btn-success">Sign Up</a></li>
+							<li ng-show="user.authenticated"><a href="" ua-logout class="btn btn-warning">Log Out</a></li>
+						</ul>
+					  </div>
+				  </div>
+			  </div>
+		   </div>
+		   <div class="col-md-10 col-sm-6">
+			  <div class="panel panel-default panel-data">
+				  <div class="panel-body">
+				     <div ng-view></div>
+				  </div>
+			  </div>
+		   </div>
+	   </div>
+	</div>
+  
+  <script src="../pages/userapp/lib/angular/angular.min.js"></script>
+  <script src="../pages/userapp/lib/angular/angular-route.min.js"></script>
+  <script src="../pages/userapp/js/app.js"></script>
+  <script src="../pages/userapp/js/services.js"></script>
+  <script src="../pages/userapp/js/controllers.js"></script>
+  <script src="../pages/userapp/js/filters.js"></script>
+  <script src="../pages/userapp/js/directives.js"></script>
+
+  <script src="https://app.userapp.io/js/userapp.client.js"></script>
+  <script src="https://app.userapp.io/js/angularjs.userapp.js"></script>
+</body>
+</html>

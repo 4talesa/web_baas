@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<title>Node - Express</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<% include ../partials/header.ejs %>
+
+<!-- personal CSS -->
+<link rel="stylesheet" href="../pages/express/css/style.css">
+
+<script type="text/javascript">
+	var urlServer = 'http://localhost:8081';
+	//var urlServer = 'https://floating-sierra-5664.herokuapp.com';
+
+	function loadTable(){
+		$.ajax({
+		  type:  'GET',
+		  url: urlServer+'/listUsers',
+		  dataType: 'json',
+		  success: function(data){		
+				drawTable(data);
+		  }
+		});
+	}
+	function drawTable(data) {
+	
+		$("#personDataTable > tbody").html("");
+		for (var i = 0; i < data.length; i++) {
+			drawRow(data[i]);
+		}
+	}
+
+	function drawRow(rowData) {
+		var row = $("<tr>");
+		
+		$("#personDataTable > tbody").append(row);
+		
+		row.append($("<td>" + rowData._id + "</td>"));
+		row.append($("<td>" + rowData.id + "</td>"));
+		row.append($("<td>" + rowData.name + "</td>"));
+		row.append($("<td>" + rowData.profession + "</td>"));
+		row.append($("<td> <a href='#' onclick='editUser(event, "+rowData.id+")' title='Edit'><img class='btn-edit-small'></a> <a href='#' onclick='delUser(event, "+rowData.id+")' title='Delete'><img class='btn-delete-small'></a> </td>"));
+	}
+		
+	$(document).ready(function() {
+		
+		loadTable();
+
+	});
+	
+	function resetForm($form) {
+		$form.find('input:text, input:password, input:file, select, textarea').val('');
+		$form.find('input:radio, input:checkbox')
+			 .removeAttr('checked').removeAttr('selected');
+	}
+	
+	function newUser(e) {
+		resetForm($('#frmUser'));
+		
+		$("#inputId").prop('disabled', false);
+		
+		$('#dialogUserLabel').html( 'New User' );
+		
+		$('#dialogUser').modal('show');
+		
+		e.preventDefault();
+	}
+	
+	function editUser(e, userId) {
+	
+		$.ajax({
+		  type:  'GET',
+		  url: urlServer+'/getUser/'+userId,
+		  dataType: 'json',
+		  encode : true
+		}).done(function(data){
+				// log data to the console so we can see
+				console.log(data);
+				
+				resetForm($('#frmUser'));
+		
+				$('#input_Id').val(data[0]._id);
+				$('#inputId').val(data[0].id);
+				$('#inputName').val(data[0].name);
+				$('#inputProfession').val(data[0].profession);
+				$('#inputPassword1').val(data[0].password);
+				
+				$("#inputId").prop('disabled', true);				
+				
+				$('#dialogUserLabel').html( 'Edit User' );
+				
+				$('#dialogUser').modal('show');
+			});
+		
+		e.preventDefault();	
+		
+	}
+	
+	function delUser(e, userId) {	
+	
+		$.ajax({
+		  type:  'GET',
+		  url: urlServer+'/getUser/'+userId,
+		  dataType: 'json',
+		  encode      : true
+		}).done(function(data){
+				// log data to the console so we can see
+				console.log(data);
+					
+				resetForm($('#frmDeleteUser'));
+		
+				$('#inputDelete_Id').val(data[0]._id);
+				$('#inputDeleteId').val(data[0].id);
+				$('#inputDeleteName').val(data[0].name);
+				
+				$('#dialogDeleteLabel').html( 'Delete confirmation' );
+				
+				$('#dialogDelete').modal('show');
+			});
+		
+		e.preventDefault();
+	}
+	
+	function saveUser(){
+	
+			$("#inputId").prop('disabled', false);
+			console.log($('#frmUser').serialize()); 			
+			
+			if ($('#input_Id').val()==""){
+				// process the form for New User
+				$.ajax({
+					type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+					url         : urlServer+'/addUser', // the url where we want to POST
+					data        : $('#frmUser').serialize(), // our data object
+					dataType    : 'json', // what type of data do we expect back from the server
+					encode      : true
+				})// using the done promise callback
+				.done(function(data) {
+
+					// log data to the console so we can see
+					console.log(data); 
+
+					$('#dialogUser').modal('hide');
+					loadTable();
+				});
+			}else{
+				// process the form to Edit User
+				$.ajax({
+					type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+					url         : urlServer+'/updUser', // the url where we want to POST
+					data        : $('#frmUser').serialize(), // our data object
+					dataType    : 'json', // what type of data do we expect back from the server
+					encode      : true
+				})// using the done promise callback
+				.done(function(data) {
+
+					// log data to the console so we can see
+					console.log(data); 
+
+					$('#dialogUser').modal('hide');
+					loadTable();
+				});
+			}
+		
+	}
+	function deleteUser(){
+		//$("#inputDeleteId").prop('disabled', false);
+			
+		// process the form for New User
+		$.ajax({
+			type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+			url         : urlServer+'/delUser/'+$("#inputDeleteId").val(), // the url where we want to POST
+			dataType    : 'json', // what type of data do we expect back from the server
+			encode      : true
+		})// using the done promise callback
+		.done(function(data) {
+
+			// log data to the console so we can see
+			console.log(data); 
+
+			$('#dialogDelete').modal('hide');
+			loadTable();
+		});
+
+			
+	}
+	function chooseServer(){
+		urlServer = $("#serverOption").val();
+		console.log(urlServer);
+		loadTable();
+	}
+	
+</script>
+
+</head>
+<body>
+
+<% include ../partials/menu.ejs %>
+
+<div>
+	
+	<div class="container" id="main">
+	  
+		<div class="row">
+	    
+			<div class="col-md-4 col-sm-6">
+	      
+		      <div class="panel panel-default">
+			     
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-12">
+								<h4>Please execute follow the steps:</h4>
+							</div>
+							<div class="col-md-12">
+								Exec assets\express\start_mongoDB.bat
+							</div>
+							<div class="col-md-12">
+								Exec assets\express\start_node.bat
+							</div>							
+						</div>						
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-4 col-sm-6">
+	      
+		      <div class="panel panel-default">
+			     
+					<div class="panel-body">
+						<div class="row">							
+							<div class="col-md-12">
+								<h4>List of APIs (Use Postman):</h4>
+								<ul>
+								<li><a href="http://localhost:8081/listUsers" target="_blank">GET http://localhost:8081/listUsers</a></li>
+								<li><a href="http://localhost:8081/addUser" target="_blank"> POST http://localhost:8081/addUser</a></li>
+								<li><a href="http://localhost:8081/getUser/2" target="_blank">GET http://localhost:8081/getUser/2</a></li>
+								<li><a href="http://localhost:8081/delUser/2" target="_blank">POST http://localhost:8081/delUser/2</a></li>
+								<li><a href="http://localhost:8081/updUser" target="_blank">POST http://localhost:8081/updUser</a></li>
+								</ul>
+							</div>
+						</div>						
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-4 col-sm-6">
+	      
+		      <div class="panel panel-default">
+			     
+					<div class="panel-body">
+						<div class="row">							
+							<div class="col-md-12">
+								<h4>Choose the server:</h4>
+								<form id="frmChooseServer" method="post" novalidate enctype="multipart/form-data">
+									<select id="serverOption" name="serverOption" onClick="chooseServer()">
+										<option value="http://localhost:8081">Local Node.Js + Express + MongoDb</option>
+										<option value="http://localhost:5000">Local Heroku</option>
+										<option value="https://floating-sierra-5664.herokuapp.com">Remote (floating-sierra-5664) Heroku</option>
+										<option value="https://protected-bayou-8222.herokuapp.com">Remote (protected-bayou-8222)Heroku</option>
+									</select>								
+								</form>
+							</div>
+						</div>						
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-12 col-sm-12">
+				<div class="panel panel-default panel-data">
+			     
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-8">
+								<h4>Users</h4>								
+							</div>
+							<div class="col-md-2">
+								<a href="#" onclick="newUser(event)" title="Add"><img class='btn-new-small'>New User</a>
+							</div>
+							<div class="col-md-2">
+								<a href="#" onclick="loadTable()" title="Add"><img class='btn-reload-small'>Reload</a>
+							</div>
+						</div>
+					</div>
+					<div class="panel-data-table">
+						<table class="table table-bordered table-striped header-fixed personDataTable" id="personDataTable">
+							<thead>
+								<tr>
+									<th>_Id</th>
+									<th>Id</th>
+									<th>Name</th>
+									<th>Profession</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>						
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+</div>
+
+
+<!-- Modal for New and Edit -->
+<div class="modal fade" id="dialogUser" tabindex="-1" role="dialog" aria-labelledby="dialogUserLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="dialogUserLabel">New User</h4>
+			</div>
+			<div class="modal-body">
+				<form id="frmUser" method="post" novalidate enctype="multipart/form-data">
+					<div class="form-group">
+						<label for="input_Id">_Id</label>
+						<input type="text" class="form-control" id="input_Id" placeholder="_Id" disabled>
+					</div>
+					
+					<div class="form-group">
+						<label for="inputId">Id</label>
+						<input type="text" class="form-control" id="inputId" placeholder="Id" name="id">
+					</div>
+				
+					<div class="form-group">
+						<label for="inputName">Name</label>
+						<input type="text" class="form-control" id="inputName" placeholder="Name" name="name">
+					</div>
+					
+					<div class="form-group">
+						<label for="inputProfession">Profession</label>
+						<input type="text" class="form-control" id="inputProfession" placeholder="Profession" name="profession">
+					</div>
+				
+					<div class="form-group">
+						<label for="inputPassword1">Password</label>
+						<input type="password" class="form-control" id="inputPassword1" placeholder="Password" name="password">
+					</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" onClick="saveUser()">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal for Delete -->
+<div class="modal fade" id="dialogDelete" tabindex="-1" role="dialog" aria-labelledby="dialogDeleteLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="dialogDeleteLabel">Delete confirmation</h4>
+			</div>
+			<div class="modal-body">
+				<form id="frmDeleteUser" method="post" novalidate enctype="multipart/form-data">
+					<div class="form-group">
+						<label for="inputDelete_Id">_Id</label>
+						<input type="text" class="form-control" id="inputDelete_Id" placeholder="_Id" disabled>
+					</div>
+					
+					<div class="form-group">
+						<label for="inputDeleteId">Id</label>
+						<input type="text" class="form-control" id="inputDeleteId" placeholder="Id" name="id" disabled>
+					</div>
+				
+					<div class="form-group">
+						<label for="inputDeleteName">Name</label>
+						<input type="text" class="form-control" id="inputDeleteName" placeholder="Name" name="name" disabled>
+					</div>					
+					
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" onClick="deleteUser()">Confirm</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>

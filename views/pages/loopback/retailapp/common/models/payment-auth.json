@@ -1,0 +1,39 @@
+{
+  "name": "paymentAuth",
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "paymentMethod": {
+      "type": "paymentMethod",
+      "required": true
+    },
+    "store": {
+      "type": "store",
+      "required": true
+    },
+    "value": {
+      "type": "number",
+      "required": true
+    },
+    "shoppingCart": {
+      "type": "shoppingCart",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

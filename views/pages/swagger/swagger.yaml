@@ -1,0 +1,177 @@
+swagger: '2.0'
+info:
+  title: Node.js + Express + MongoDB
+  description: Exposing webinar API
+  version: 1.0.0
+host: localhost:5000
+schemes:
+  - http
+basePath: /
+produces:
+  - application/json
+paths:
+  /listUsers:
+    get:
+      summary: User Lis
+      description: The List of Users of our system.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: An array of users
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /addUser:
+    post:
+      summary: Update User by id
+      description: Update a unique user by id.
+      parameters:
+          - name: id
+            in: body
+            type: string
+            description: Unique customer identifier to be used for experience customization.
+          - name: name
+            in: body
+            type: string
+            description: Name of the user.
+          - name: password
+            in: body
+            type: string
+            description: Password of the user.
+          - name: profession
+            in: body
+            type: string
+            description: Profession of the user.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: User found
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /getUser/{id}:
+    get:
+      summary: Get User by id
+      description: Return a unique user by id.
+      parameters:
+          - name: id
+            in: path
+            type: string
+            description: Unique customer identifier to be used for experience customization.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: An array of users
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /delUser/{id}:
+    post:
+      summary: Delete User by id
+      description: Delete a unique user by id.
+      parameters:
+          - name: id
+            in: path
+            type: string
+            description: Unique customer identifier to be used for experience customization.
+          - name: harddelete
+            in: body
+            type: string
+            description: 'Values to True of False to define if is a hard delete of soft delete.'
+      tags:
+        - Users
+      responses:
+        '200':
+          description: An array of users
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /updUser/:
+    post:
+      summary: Update User by id
+      description: Update a unique user by id.
+      parameters:
+          - name: id
+            in: body
+            type: string
+            description: Unique customer identifier to be used for experience customization.
+          - name: name
+            in: body
+            type: string
+            description: Name of the user.
+          - name: password
+            in: body
+            type: string
+            description: Password of the user.
+          - name: profession
+            in: body
+            type: string
+            description: Profession of the user.
+          
+      tags:
+        - Users
+      responses:
+        '200':
+          description: An array of users
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+definitions:
+  User:
+    type: object
+    properties:
+      _id:
+        type: string
+        description: Generated id for user.
+      name:
+        type: string
+        description: Name of the user.
+      password:
+        type: string
+        description: Password of user.
+      profession:
+        type: string
+        description: Profession of the user.
+      id:
+        type: string
+        description: Unique identifier of the user.
+  
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

@@ -1,0 +1,31 @@
+{
+  "name": "shoppingCart",
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "store": {
+      "type": "store",
+      "required": true
+    },
+    "userApp": {
+      "type": "appUser",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

@@ -1,0 +1,33 @@
+{
+  "name": "achievement",
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
+    "note": {
+      "type": "string"
+    },
+    "date": {
+      "type": "date"
+    },
+    "appUser": {
+      "type": "appUser",
+      "required": true
+    },
+    "achievementType": {
+      "type": "achievementType",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

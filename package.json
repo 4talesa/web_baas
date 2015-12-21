@@ -1,0 +1,16 @@
+{
+  "name": "webinar",
+  "version": "1.0.0",
+  "main": "server.js",    
+  "dependencies": {
+    "connect": "latest",
+	"serve-static": "latest",
+	"ejs": "latest",
+	"express": "latest"
+  },  
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "description": "webinar"
+}

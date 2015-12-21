@@ -1,0 +1,11 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "retailappmdb": {
+    "database": "retailappmdb",
+    "name": "retailappmdb",
+    "connector": "mongodb"
+  }
+}

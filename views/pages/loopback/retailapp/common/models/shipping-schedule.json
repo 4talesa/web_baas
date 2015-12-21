@@ -1,0 +1,35 @@
+{
+  "name": "shippingSchedule",
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true
+    },
+    "shoppingCart": {
+      "type": "shoppingCart",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "store": {
+      "type": "store",
+      "required": true
+    },
+    "deliveryAddress": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

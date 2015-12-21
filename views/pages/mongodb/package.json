@@ -1,0 +1,17 @@
+{
+  "name": "webinar",
+  "version": "1.0.0",
+  "main": "server.js",    
+  "dependencies": {
+    "assert": "latest",
+	"fs": "latest",	
+	"express": "latest",
+	"mongodb": "latest",
+	"body-parser": "latest"
+  },  
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "description": "webinar"
+}
